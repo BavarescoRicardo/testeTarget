@@ -1,5 +1,7 @@
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class App {
@@ -16,7 +18,8 @@ public class App {
         app.faturamentoDistribuidora();
 
         // 4.
-        
+        app.calcularFaturamentoPorEstados();
+
 
     }
 
@@ -58,7 +61,7 @@ public class App {
         return false;
     }
 
-    public void faturamentoDistribuidora(){
+    public void faturamentoDistribuidora() {
         try {
             // Lê o arquivo JSON
             String filePath = "dados.json"; // Substitua pelo caminho do arquivo JSON
@@ -102,13 +105,62 @@ public class App {
             }
 
             // Exibe os resultados
-            System.out.println("Menor valor " + menorValor);
-            System.out.println("Maior valor " + maiorValor);
-            System.out.println("Dias acima da média: " + diasAcimaMedia);
+            System.out.println("Menor valor de faturamento: " + menorValor);
+            System.out.println("Maior valor de faturamento: " + maiorValor);
+            System.out.println("Número de dias acima da média mensal: " + diasAcimaMedia);
 
         } catch (Exception e) {
             e.printStackTrace();
-        }        
+        }
+    }
+
+    public void calcularFaturamentoPorEstados() {
+        // Lista de faturamentos por estado
+        List<FaturamentoPorEstado> estados = new ArrayList<>();
+        estados.add(new FaturamentoPorEstado("SP", 67836.43));
+        estados.add(new FaturamentoPorEstado("RJ", 36678.66));
+        estados.add(new FaturamentoPorEstado("MG", 29229.88));
+        estados.add(new FaturamentoPorEstado("ES", 27165.48));
+        estados.add(new FaturamentoPorEstado("Outros", 19849.53));
+
+        // Calculando o faturamento total
+        double faturamentoTotal = 0;
+        for (FaturamentoPorEstado estado : estados) {
+            faturamentoTotal += estado.getFaturamento();
+        }
+
+        // Exibindo a porcentagem de cada estado
+        System.out.println("Faturamento por estado (em porcentagem):");
+        for (FaturamentoPorEstado estado : estados) {
+            double percentual = (estado.getFaturamento() / faturamentoTotal) * 100;
+            System.out.printf("%s: %.2f%%\n", estado.getEstado(), percentual);
+        }
+    }
+
+    class FaturamentoPorEstado {
+        private String estado;
+        private double faturamento;
+    
+        public FaturamentoPorEstado(String estado, double faturamento) {
+            this.estado = estado;
+            this.faturamento = faturamento;
+        }
+    
+        public String getEstado() {
+            return estado;
+        }
+    
+        public void setEstado(String estado) {
+            this.estado = estado;
+        }
+    
+        public double getFaturamento() {
+            return faturamento;
+        }
+    
+        public void setFaturamento(double faturamento) {
+            this.faturamento = faturamento;
+        }
     }
 
 }
